@@ -23,6 +23,56 @@
             box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5); /* Red focus ring */
             border-color: #ef4444; /* Red border on focus */
         }
+
+        /* Slideshow specific styles */
+        .slideshow-container {
+            max-width: 100%;
+            position: relative;
+            margin: auto;
+            border-radius: 0.5rem; /* rounded-lg */
+            overflow: hidden; /* Ensure images stay within bounds */
+        }
+
+        .mySlides {
+            display: none; /* Hide all slides by default */
+            width: 100%;
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 0.5rem;
+        }
+
+        .mySlides img {
+            width: 100%;
+            height: auto;
+            display: block; /* Remove extra space below image */
+        }
+
+        /* Next & previous buttons */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        /* On hover, add a black background color with a little more opacity */
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -32,7 +82,7 @@
         <div class="container mx-auto flex justify-center items-center px-4">
             <!-- Logo Placeholder -->
             <div class="text-2xl font-bold text-gray-300">
-                <img src="assets /vivaloca.png" width="300" height="100" alt="A description of the image">
+                <img src="assets /vivaloca.png" width="300" height="100" alt="Viva Loca Logo">
             </div>
             <!-- The rest of the nav bar is intentionally left empty as per request -->
         </div>
@@ -40,26 +90,35 @@
 
     <!-- Main Content Area -->
     <main class="flex-grow container mx-auto p-8 lg:p-12">
-        <div class="flex flex-col lg:flex-row bg-white rounded-xl shadow-2xl overflow-hidden">
+        <div class="flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
+
+           <!-- Restaurant Candid Picture Placeholder Section (Moved to Top) -->
+            <div class="w-full h-96 bg-gray-100 flex items-center justify-center p-6 md:p-10">
+                <div class="w-full h-full bg-cover bg-center rounded-lg shadow-inner"
+                     style="background-image: url('assets /new_head.png'); background-size: cover; background-repeat: no-repeat; background-position: center;">
+                    <!-- You can replace the placeholder URL with your actual image URL -->
+                </div>
+            </div>
 
             <!-- Event Booking Form Section -->
-            <div class="w-full lg:w-1/2 p-6 md:p-10">
+            <div class="w-full p-6 md:p-10">
                 <h1 class="text-4xl font-bold text-gray-800 mb-6 text-center lg:text-left">Event Booking Request</h1>
                 <p class="text-gray-600 mb-8 text-center lg:text-left">Please fill out the form below to request an event booking at our restaurant. We will get back to you shortly!</p>
 
                 <form class="space-y-6" action="https://formsubmit.co/8f3f42e07ad9b763e5086fc1d1d047ee" method="POST">
-                    <input type="hidden" name="_subject" value="New form submission!">
+                    <input type="hidden" name="_subject" value="New event booking submission!">
                     <input type="hidden" name="_next" value="http://127.0.0.1:5500/thankyou.html">
+
                     <!-- Event Details -->
                     <div>
                         <label for="eventName" class="block text-sm font-medium text-gray-700 mb-1">Event Name/Type</label>
-                        <input type="text" id="event Name" name="eventName" placeholder="e.g., Birthday Celebration, Corporate Dinner"
+                        <input type="text" id="eventName" name="eventName" placeholder="e.g., Birthday Celebration, Corporate Dinner"
                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                     </div>
 
                     <div>
                         <label for="eventType" class="block text-sm font-medium text-gray-700 mb-1">Type of Event</label>
-                        <select id="eventType" name="event Type"
+                        <select id="eventType" name="eventType"
                                 class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                             <option value="">Select an Event Type</option>
                             <option value="birthday">Birthday Celebration</option>
@@ -74,12 +133,12 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="eventDate" class="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
-                            <input type="date" id="event Date" name="eventDate"
+                            <input type="date" id="eventDate" name="eventDate"
                                    class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                         </div>
                         <div>
                             <label for="numGuests" class="block text-sm font-medium text-gray-700 mb-1">Number of Guests</label>
-                            <input type="number" id="numGuests" name="number of Guests" min="1" max="200" placeholder="e.g., 50"
+                            <input type="number" id="numGuests" name="numGuests" min="1" max="200" placeholder="e.g., 50"
                                    class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                         </div>
                     </div>
@@ -87,13 +146,157 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Preferred Start Time</label>
-                            <input type="time" id="startTime" name="start Time"
+                            <input type="time" id="startTime" name="startTime"
                                    class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                         </div>
                         <div>
                             <label for="endTime" class="block text-sm font-medium text-gray-700 mb-1">Preferred End Time</label>
-                            <input type="time" id="end Time" name="endTime"
+                            <input type="time" id="endTime" name="endTime"
                                    class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200">
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Package Selection -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Package Selection</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="packageStarter1" name="packageOption" value="Starter - 3 items, Main Course - 5 items" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholOptions(this.value)">
+                            <label for="packageStarter1" class="ml-2 block text-sm text-gray-900">Starter - 3 items, Main Course - 5 items</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="packageStarter2" name="packageOption" value="Starter - 5 items, Main Course - 8 items" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholOptions(this.value)">
+                            <label for="packageStarter2" class="ml-2 block text-sm text-gray-900">Starter - 5 items, Main Course - 8 items</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="packageStarter3" name="packageOption" value="Starter - 7 items, Main Course - 10 items" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholOptions(this.value)">
+                            <label for="packageStarter3" class="ml-2 block text-sm text-gray-900">Starter - 7 items, Main Course - 10 items</label>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Alcohol Inclusion:</label>
+                            <div class="flex gap-4">
+                                <div class="flex items-center">
+                                    <input type="radio" id="alcoholYes" name="alcoholIncluded" value="With Alcohol" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholDetails(true)">
+                                    <label for="alcoholYes" class="ml-2 block text-sm text-gray-900">With Alcohol</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="alcoholNo" name="alcoholIncluded" value="Without Alcohol" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholDetails(false)">
+                                    <label for="alcoholNo" class="ml-2 block text-sm text-gray-900">Without Alcohol</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center mt-4">
+                            <input type="checkbox" id="customizeOption" name="customizeOption" value="Customize" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500" onchange="toggleCustomizeSection()">
+                            <label for="customizeOption" class="ml-2 block text-sm text-gray-900">Option to Customize</label>
+                        </div>
+                    </div>
+
+                    <!-- Customize Section (Hidden by default) -->
+                    <div id="customizeSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Customize Your Event</h3>
+
+                        <!-- Menu Slideshow -->
+                        <div class="slideshow-container mb-6">
+                            <!-- Replace these with your actual menu image paths -->
+                            <img class="mySlides" src="menu/page1.png" alt="Menu Page 1">
+                            <img class="mySlides" src="menu/page2.png" alt="Menu Page 2">
+                            <img class="mySlides" src="menu/page3.png" alt="Menu Page 3">
+                            <img class="mySlides" src="menu/page5.png" alt="Menu Page 4">
+                            <img class="mySlides" src="menu/page6.png" alt="Menu Page 5">
+                            <img class="mySlides" src="menu/page7.png" alt="Menu Page 6">
+                            <img class="mySlides" src="menu/page8.png" alt="Menu Page 7">
+                            <img class="mySlides" src="menu/page9.png" alt="Menu Page 8">
+                            <img class="mySlides" src="menu/page10.png" alt="Menu Page 9">
+                            
+
+                            <!-- Next and previous buttons -->
+                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label for="customStarters" class="block text-sm font-medium text-gray-700 mb-1">Custom Starters </label>
+                                <textarea id="customStarters" name="customStarters" rows="2" placeholder="e.g., Spring Rolls, Prawn Tempura"
+                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                            </div>
+                            <div>
+                                <label for="customMainCourse" class="block text-sm font-medium text-gray-700 mb-1">Custom Main Course Items </label>
+                                <textarea id="customMainCourse" name="customMainCourse" rows="2" placeholder="e.g., Butter Chicken, Lasagna, Tacos"
+                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                            </div>
+                            <div>
+                                <label for="customAlcohol" class="block text-sm font-medium text-gray-700 mb-1">Custom Alcohol </label>
+                                <textarea id="customAlcohol" name="customAlcohol" rows="2" placeholder="e.g., Red Wine, Craft Beer, Cocktails"
+                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                            </div>
+                            <div>
+                                <label for="customAddons" class="block text-sm font-medium text-gray-700 mb-1">Custom Add-ons </label>
+                                <textarea id="customAddons" name="customAddons" rows="2" placeholder="e.g., Dessert Bar, Photo Booth"
+                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Cuisine Selection -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Cuisine Selection</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="cuisineIndian" name="cuisineSelection" value="Indian Cuisine" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                            <label for="cuisineIndian" class="ml-2 block text-sm text-gray-900">Indian Cuisine (Starters & Main Course)</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="cuisineMediterranean" name="cuisineSelection" value="Mediterranean Cuisine" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                            <label for="cuisineMediterranean" class="ml-2 block text-sm text-gray-900">Mediterranean Cuisine (Starters & Main Course)</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="cuisineMexican" name="cuisineSelection" value="Mexican Cuisine" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                            <label for="cuisineMexican" class="ml-2 block text-sm text-gray-900">Mexican Cuisine (Starters & Main Course)</label>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Alcohol Selection (Hidden by default) -->
+                    <div id="alcoholDetailsSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Alcohol Selection</h2>
+                        <div class="space-y-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Alcohol Option:</label>
+                            <div class="flex gap-4">
+                                <div class="flex items-center">
+                                    <input type="radio" id="alcoholPack" name="alcoholOption" value="Pack" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                                    <label for="alcoholPack" class="ml-2 block text-sm text-gray-900">Pack</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="alcoholFreeFlow" name="alcoholOption" value="Free Flow" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                                    <label for="alcoholFreeFlow" class="ml-2 block text-sm text-gray-900">Free Flow</label>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label for="alcoholTopUp" class="block text-sm font-medium text-gray-700 mb-1">Top-up Options (Optional)</label>
+                                <input type="text" id="alcoholTopUp" name="alcoholTopUp" placeholder="e.g., Premium Wines, Specific Cocktails"
+                                       class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Additional Requirements -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Additional Requirements</h2>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="reqDJ" name="additionalRequirements" value="DJ" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                            <label for="reqDJ" class="ml-2 block text-sm text-gray-900">DJ</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="reqLights" name="additionalRequirements" value="Lights" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                            <label for="reqLights" class="ml-2 block text-sm text-gray-900">Lights</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="reqMusic" name="additionalRequirements" value="Music" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                            <label for="reqMusic" class="ml-2 block text-sm text-gray-900">Music</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="reqProjector" name="additionalRequirements" value="Projector" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                            <label for="reqProjector" class="ml-2 block text-sm text-gray-900">Projector</label>
                         </div>
                     </div>
 
@@ -101,49 +304,24 @@
                     <h2 class="text-xl font-semibold text-gray-800 pt-4">Contact Information</h2>
                     <div>
                         <label for="contactName" class="block text-sm font-medium text-gray-700 mb-1">Your Full Name</label>
-                        <input type="text" id="contactName" name="contact Name" placeholder="John Doe"
+                        <input type="text" id="contactName" name="contactName" placeholder="John Doe"
                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                     </div>
                     <div>
                         <label for="contactEmail" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" id="contactEmail" name="contact Email" placeholder="john.doe@example.com"
+                        <input type="email" id="contactEmail" name="contactEmail" placeholder="john.doe@example.com"
                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                     </div>
                     <div>
                         <label for="contactPhone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input type="tel" id="contactPhone" name="contact Phone" placeholder="+65 1234 5678"
+                        <input type="tel" id="contactPhone" name="contactPhone" placeholder="+65 1234 5678"
                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
                     </div>
 
                     <!-- Additional Details -->
-                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Additional Details</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Other Special Requests/Notes</h2>
                     <div>
-                        <label for="preferredSeating" class="block text-sm font-medium text-gray-700 mb-2">Preferred Seating Area (select all that apply)</label>
-                        <div class="flex flex-wrap gap-4">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="seatingMain" name="preferred Seating" value="main Dining" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <label for="seatingMain" class="ml-2 block text-sm text-gray-900">Main Dining Area</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="seatingPrivate" name="preferred Seating" value="private Room" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <label for="seatingPrivate" class="ml-2 block text-sm text-gray-900">Private Room</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="seatingOutdoor" name="preferred Seating" value="outdoor" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <label for="seatingOutdoor" class="ml-2 block text-sm text-gray-900">Outdoor Seating</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="budget" class="block text-sm font-medium text-gray-700 mb-1">Estimated Budget (Optional, per guest or total)</label>
-                        <input type="text" id="budget" name="budget" placeholder="e.g., S$50 per guest, or S$2500 total"
-                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200">
-                    </div>
-
-                    <div>
-                        <label for="specialRequests" class="block text-sm font-medium text-gray-700 mb-1">Special Requests/Notes</label>
-                        <textarea id="specialRequests" name="special Requests" rows="4" placeholder="e.g., dietary restrictions, specific decorations, AV equipment needs"
+                        <textarea id="specialRequests" name="specialRequests" rows="4" placeholder="e.g., dietary restrictions, specific decorations, AV equipment needs"
                                   class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
                     </div>
 
@@ -153,14 +331,6 @@
                         Submit Booking Request
                     </button>
                 </form>
-            </div>
-
-            <!-- Restaurant Candid Picture Placeholder Section -->
-            <div class="w-full lg:w-1/2 bg-gray-100 flex items-center justify-center p-6 md:p-10">
-                <div class="w-full h-96 lg:h-full bg-cover bg-center rounded-lg shadow-inner"
-                     style="background-image: url('assets /vivaloca_head.jpg'); ">
-                    <!-- You can replace the placeholder URL with your actual image URL -->
-                </div>
             </div>
 
         </div>
@@ -182,10 +352,71 @@
         </div>
     </footer>
 
-    <!-- Empty Script tag for future JavaScript -->
+    <!-- JavaScript for dynamic form behavior and slideshow -->
     <script>
-        // Any JavaScript code can be added here in the future.
-        // For example, form validation or submission handling.
+        let slideIndex = 1; // Global variable for current slide
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            if (slides.length > 0) { // Ensure there are slides to show
+                slides[slideIndex - 1].style.display = "block";
+            }
+        }
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function toggleCustomizeSection() {
+            console.log('toggleCustomizeSection called!');
+            const customizeCheckbox = document.getElementById('customizeOption');
+            const customizeSection = document.getElementById('customizeSection');
+
+            if (customizeCheckbox && customizeSection) {
+                if (customizeCheckbox.checked) {
+                    customizeSection.classList.remove('hidden');
+                    // Show the first slide when the section becomes visible
+                    showSlides(slideIndex);
+                } else {
+                    customizeSection.classList.add('hidden');
+                    // Optionally clear fields when hidden
+                    customizeSection.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+                }
+            } else {
+                console.error('Error: customizeCheckbox or customizeSection element not found.');
+            }
+        }
+
+        function toggleAlcoholDetails(show) {
+            console.log('toggleAlcoholDetails called with show:', show);
+            const alcoholDetailsSection = document.getElementById('alcoholDetailsSection');
+
+            if (alcoholDetailsSection) {
+                if (show) {
+                    alcoholDetailsSection.classList.remove('hidden');
+                } else {
+                    alcoholDetailsSection.classList.add('hidden');
+                    // Optionally clear fields and uncheck radios when hidden
+                    alcoholDetailsSection.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+                    document.getElementById('alcoholTopUp').value = '';
+                }
+            } else {
+                console.error('Error: alcoholDetailsSection element not found.');
+            }
+        }
+
+        // Initial state setup on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleCustomizeSection(); // Hide customize section if not checked
+            toggleAlcoholDetails(false); // Hide alcohol details section initially
+        });
     </script>
 
 </body>
