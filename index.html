@@ -9,44 +9,35 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-     <style>
-        /* Custom CSS for the page */
+    <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f7f7; /* Light grey background */
+            background-color: #f7f7f7;
+            padding-bottom: 6rem; /* Add padding for the fixed footer on mobile */
         }
-        /* Custom styling for focus states to match the theme */
-        input:focus,
-        select:focus,
-        textarea:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5); /* Red focus ring */
-            border-color: #ef4444; /* Red border on focus */
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
+            border-color: #ef4444;
         }
-
-        /* Slideshow specific styles */
         .slideshow-container {
             max-width: 100%;
             position: relative;
             margin: auto;
-            border-radius: 0.5rem; /* rounded-lg */
-            overflow: hidden; /* Ensure images stay within bounds */
+            border-radius: 0.5rem;
+            overflow: hidden;
         }
-
         .mySlides {
-            display: none; /* Hide all slides by default */
+            display: none;
             width: 100%;
-            height: auto; /* Maintain aspect ratio */
+            height: auto;
             border-radius: 0.5rem;
         }
-
         .mySlides img {
             width: 100%;
             height: auto;
-            display: block; /* Remove extra space below image */
+            display: block;
         }
-
-        /* Next & previous buttons */
         .prev, .next {
             cursor: pointer;
             position: absolute;
@@ -60,43 +51,82 @@
             transition: 0.6s ease;
             border-radius: 0 3px 3px 0;
             user-select: none;
-            background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+            background-color: rgba(0,0,0,0.5);
         }
-
-        /* Position the "next button" to the right */
         .next {
             right: 0;
             border-radius: 3px 0 0 3px;
         }
-
-        /* On hover, add a black background color with a little more opacity */
         .prev:hover, .next:hover {
             background-color: rgba(0,0,0,0.8);
         }
+        /* Floating Cart Styles */
+        .cart-float {
+            position: fixed;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 300px;
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid #e5e7eb;
+        }
+        @media (max-width: 1024px) {
+            .cart-float {
+                top: auto;
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                transform: none;
+                max-width: none;
+            }
+        }
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen lg:px-6">
 
     <!-- Navbar -->
     <nav class="bg-black text-white py-4 shadow-md">
         <div class="container mx-auto flex justify-center items-center px-4">
-            <!-- Logo Placeholder -->
             <div class="text-2xl font-bold text-gray-300">
                 <img src="assets /vivaloca.png" width="300" height="100" alt="Viva Loca Logo">
             </div>
-            <!-- The rest of the nav bar is intentionally left empty as per request -->
         </div>
     </nav>
 
     <!-- Main Content Area -->
     <main class="flex-grow container mx-auto p-8 lg:p-12">
         <div class="flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden">
-
-           <!-- Restaurant Candid Picture Placeholder Section (Moved to Top) -->
+            <!-- Restaurant Candid Picture Placeholder Section (Moved to Top) -->
             <div class="w-full h-96 bg-gray-100 flex items-center justify-center p-6 md:p-10">
                 <div class="w-full h-full bg-cover bg-center rounded-lg shadow-inner"
                      style="background-image: url('assets /new_head.png'); background-size: cover; background-repeat: no-repeat; background-position: center;">
-                    <!-- You can replace the placeholder URL with your actual image URL -->
                 </div>
             </div>
 
@@ -105,93 +135,124 @@
                 <h1 class="text-4xl font-bold text-gray-800 mb-6 text-center lg:text-left">Event Booking Request</h1>
                 <p class="text-gray-600 mb-8 text-center lg:text-left">Please fill out the form below to request an event booking at our restaurant. We will get back to you shortly!</p>
 
-                <form class="space-y-6" action="https://formsubmit.co/Events@vivaloca.sg" method="POST">
+                <form id="bookingForm" class="space-y-6" action="https://formsubmit.co/8f3f42e07ad9b763e5086fc1d1d047ee" method="POST">
                     <input type="hidden" name="_subject" value="New event booking submission!">
-                    <!-- thankyou page -->
-                    <input type="hidden" name="_next" value="https://techvision131.github.io/vivaloca_changi/thankyou.html">
+                    <input type="hidden" name="_next" value="http://127.0.0.1:5500/thankyou.html">
 
-                    <!-- Event Details -->
-                    <div>
-                        <label for="eventName" class="block text-sm font-medium text-gray-700 mb-1">Event Name/Type</label>
-                        <input type="text" id="eventName" name="eventName" placeholder="e.g., Birthday Celebration, Corporate Dinner"
-                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
-                    </div>
-
-                    <div>
-                        <label for="eventType" class="block text-sm font-medium text-gray-700 mb-1">Type of Event</label>
-                        <select id="eventType" name="eventType"
-                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
-                            <option value="">Select an Event Type</option>
-                            <option value="birthday">Birthday Celebration</option>
-                            <option value="anniversary">Anniversary</option>
-                            <option value="corporate">Corporate Event</option>
-                            <option value="wedding">Wedding Reception</option>
-                            <option value="privateDining">Private Dining</option>
-                            <option value="other">Other</option>
-                        </select>
+                    <!-- Step 1: Event Details & Location -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Step 1: Event Details</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="eventName" class="block text-sm font-medium text-gray-700 mb-1">Event Name/Type</label>
+                            <input type="text" id="eventName" name="eventName" placeholder="e.g., Birthday Celebration"
+                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" required>
+                        </div>
+                        <div>
+                            <label for="numGuests" class="block text-sm font-medium text-gray-700 mb-1">Number of Guests</label>
+                            <input type="number" id="numGuests" name="numGuests" min="1" max="200" placeholder="e.g., 50"
+                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" required>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="eventDate" class="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
                             <input type="date" id="eventDate" name="eventDate"
-                                   class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
+                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" required>
                         </div>
-                        <div>
-                            <label for="numGuests" class="block text-sm font-medium text-gray-700 mb-1">Number of Guests</label>
-                            <input type="number" id="numGuests" name="numGuests" min="1" max="200" placeholder="e.g., 50"
-                                   class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Preferred Start Time</label>
                             <input type="time" id="startTime" name="startTime"
-                                   class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
-                        </div>
-                        <div>
-                            <label for="endTime" class="block text-sm font-medium text-gray-700 mb-1">Preferred End Time</label>
-                            <input type="time" id="endTime" name="endTime"
-                                   class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200">
+                                class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" required>
                         </div>
                     </div>
 
-                    <!-- Step 2: Package Selection -->
-                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Package Selection</h2>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="packageStarter1" name="packageOption" value="Starter - 3 items, Main Course - 5 items" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholOptions(this.value)">
-                            <label for="packageStarter1" class="ml-2 block text-sm text-gray-900">Starter - 3 items, Main Course - 5 items</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="packageStarter2" name="packageOption" value="Starter - 5 items, Main Course - 8 items" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholOptions(this.value)">
-                            <label for="packageStarter2" class="ml-2 block text-sm text-gray-900">Starter - 5 items, Main Course - 8 items</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="packageStarter3" name="packageOption" value="Starter - 7 items, Main Course - 10 items" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholOptions(this.value)">
-                            <label for="packageStarter3" class="ml-2 block text-sm text-gray-900">Starter - 7 items, Main Course - 10 items</label>
-                        </div>
-
-                        <div class="mt-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Alcohol Inclusion:</label>
-                            <div class="flex gap-4">
-                                <div class="flex items-center">
-                                    <input type="radio" id="alcoholYes" name="alcoholIncluded" value="With Alcohol" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholDetails(true)">
-                                    <label for="alcoholYes" class="ml-2 block text-sm text-gray-900">With Alcohol</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="radio" id="alcoholNo" name="alcoholIncluded" value="Without Alcohol" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" onchange="toggleAlcoholDetails(false)">
-                                    <label for="alcoholNo" class="ml-2 block text-sm text-gray-900">Without Alcohol</label>
-                                </div>
+                    <!-- Dining Mode -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dining Mode</label>
+                        <div class="flex gap-4">
+                            <div class="flex items-center">
+                                <input type="radio" id="modeDineIn" name="diningMode" value="Dine-In" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" required checked>
+                                <label for="modeDineIn" class="ml-2 block text-sm text-gray-900">Dine-In</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="modeDelivery" name="diningMode" value="Delivery" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" required>
+                                <label for="modeDelivery" class="ml-2 block text-sm text-gray-900">Delivery</label>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="flex items-center mt-4">
-                            <input type="checkbox" id="customizeOption" name="customizeOption" value="Customize" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500" onchange="toggleCustomizeSection()">
-                            <label for="customizeOption" class="ml-2 block text-sm text-gray-900">Option to Customize</label>
+                    <!-- Outlet Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Outlet</label>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="flex items-center">
+                                <input type="radio" id="outletChangi" name="outletSelection" value="Vivaloca Changi" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" required>
+                                <label for="outletChangi" class="ml-2 block text-sm text-gray-900">Vivaloca Changi</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="outletCosford" name="outletSelection" value="Vivaloca Cosford" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" required>
+                                <label for="outletCosford" class="ml-2 block text-sm text-gray-900">Vivaloca Cosford</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="outletSalaam" name="outletSelection" value="Salaam Namaste" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" required>
+                                <label for="outletSalaam" class="ml-2 block text-sm text-gray-900">Salaam Namaste</label>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Step 2: Menu Selection -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Step 2: Menu Selection</h2>
+                    <div class="space-y-4">
+                         <div class="flex items-center">
+                            <input type="radio" id="selectionTypePackage" name="selectionType" value="package" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" checked>
+                            <label for="selectionTypePackage" class="ml-2 block text-sm text-gray-900">Choose a Tiered Package</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="selectionTypeCustomize" name="selectionType" value="customize" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                            <label for="selectionTypeCustomize" class="ml-2 block text-sm text-gray-900">Customize</label>
+                        </div>
+                    </div>
+
+                    <!-- Tiered Package Section -->
+                    <div id="packageSelectionSection" class="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Tiered Packages</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <input type="radio" id="package30" name="packageOption" value="$30: 2 starters, 2 mains, 1 salad, roti/naan, rice, 1 dessert" data-price="30" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio" required>
+                                <label for="package30" class="ml-2 block text-sm text-gray-900"><b>$30:</b> 2 starters, 2 mains, 1 salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="package40a" name="packageOption" value="$40 (Option A): 2 starters, 3 mains, salad, roti/naan, rice, 1 dessert" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <label for="package40a" class="ml-2 block text-sm text-gray-900"><b>$40 (Option A):</b> 2 starters, 3 mains, salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="package40b" name="packageOption" value="$40 (Option B): 3 starters, 2 mains, salad, roti/naan, rice, 1 dessert" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <label for="package40b" class="ml-2 block text-sm text-gray-900"><b>$40 (Option B):</b> 3 starters, 2 mains, salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="package50" name="packageOption" value="$50: 3 starters, 3 mains, salad, roti/naan, rice, 1 dessert" data-price="50" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <label for="package50" class="ml-2 block text-sm text-gray-900"><b>$50:</b> 3 starters, 3 mains, salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="package60" name="packageOption" value="$60: 4 starters, 4 mains, salad, roti/naan, rice, 1 dessert" data-price="60" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <label for="package60" class="ml-2 block text-sm text-gray-900"><b>$60:</b> 4 starters, 4 mains, salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="package70" name="packageOption" value="$70: 5 starters, 5 mains, salad, roti/naan, rice, 1 dessert" data-price="70" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <label for="package70" class="ml-2 block text-sm text-gray-900"><b>$70:</b> 5 starters, 5 mains, salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="package80" name="packageOption" value="$80: 6 starters, 6 mains, salad, roti/naan, rice, 1 dessert" data-price="80" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <label for="package80" class="ml-2 block text-sm text-gray-900"><b>$80:</b> 6 starters, 6 mains, salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="package90" name="packageOption" value="$90: 7 starters, 7 mains, salad, roti/naan, rice, 1 dessert" data-price="90" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <label for="package90" class="ml-2 block text-sm text-gray-900"><b>$90:</b> 7 starters, 7 mains, salad, roti/naan, rice, 1 dessert</label>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- Customize Section (Hidden by default) -->
                     <div id="customizeSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
@@ -199,16 +260,15 @@
 
                         <!-- Menu Slideshow -->
                         <div class="slideshow-container mb-6">
-                            <!-- Replace these with your actual menu image paths -->
-                            <img class="mySlides" src="menu/page1.png" alt="Menu Page 1">
-                            <img class="mySlides" src="menu/page2.png" alt="Menu Page 2">
-                            <img class="mySlides" src="menu/page3.png" alt="Menu Page 3">
-                            <img class="mySlides" src="menu/page5.png" alt="Menu Page 4">
-                            <img class="mySlides" src="menu/page6.png" alt="Menu Page 5">
-                            <img class="mySlides" src="menu/page7.png" alt="Menu Page 6">
-                            <img class="mySlides" src="menu/page8.png" alt="Menu Page 7">
-                            <img class="mySlides" src="menu/page9.png" alt="Menu Page 8">
-                            <img class="mySlides" src="menu/page10.png" alt="Menu Page 9">
+                            <img class="mySlides w-full" src="menu/page1.png" alt="Menu Page 1">
+                            <img class="mySlides w-full" src="menu/page2.png" alt="Menu Page 2">
+                            <img class="mySlides w-full" src="menu/page3.png" alt="Menu Page 3">
+                            <img class="mySlides w-full" src="menu/page5.png" alt="Menu Page 4">
+                            <img class="mySlides w-full" src="menu/page6.png" alt="Menu Page 5">
+                            <img class="mySlides w-full" src="menu/page7.png" alt="Menu Page 6">
+                            <img class="mySlides w-full" src="menu/page8.png" alt="Menu Page 7">
+                            <img class="mySlides w-full" src="menu/page9.png" alt="Menu Page 8">
+                            <img class="mySlides w-full" src="menu/page10.png" alt="Menu Page 9">
                             
 
                             <!-- Next and previous buttons -->
@@ -220,85 +280,171 @@
                             <div>
                                 <label for="customStarters" class="block text-sm font-medium text-gray-700 mb-1">Custom Starters </label>
                                 <textarea id="customStarters" name="customStarters" rows="2" placeholder="e.g., Spring Rolls, Prawn Tempura"
-                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                                                  class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
                             </div>
                             <div>
                                 <label for="customMainCourse" class="block text-sm font-medium text-gray-700 mb-1">Custom Main Course Items </label>
                                 <textarea id="customMainCourse" name="customMainCourse" rows="2" placeholder="e.g., Butter Chicken, Lasagna, Tacos"
-                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                                                  class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
                             </div>
                             <div>
                                 <label for="customAlcohol" class="block text-sm font-medium text-gray-700 mb-1">Custom Alcohol </label>
                                 <textarea id="customAlcohol" name="customAlcohol" rows="2" placeholder="e.g., Red Wine, Craft Beer, Cocktails"
-                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                                                  class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
                             </div>
                             <div>
                                 <label for="customAddons" class="block text-sm font-medium text-gray-700 mb-1">Custom Add-ons </label>
                                 <textarea id="customAddons" name="customAddons" rows="2" placeholder="e.g., Dessert Bar, Photo Booth"
-                                          class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                                                  class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 3: Cuisine Selection -->
-                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Cuisine Selection</h2>
+
+                    <!-- Step 3: Alcohol Options -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Step 3: Alcohol Options</h2>
                     <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="cuisineIndian" name="cuisineSelection" value="Indian Cuisine" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
-                            <label for="cuisineIndian" class="ml-2 block text-sm text-gray-900">Indian Cuisine (Starters & Main Course)</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="cuisineMediterranean" name="cuisineSelection" value="Mediterranean Cuisine" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
-                            <label for="cuisineMediterranean" class="ml-2 block text-sm text-gray-900">Mediterranean Cuisine (Starters & Main Course)</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="cuisineMexican" name="cuisineSelection" value="Mexican Cuisine" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
-                            <label for="cuisineMexican" class="ml-2 block text-sm text-gray-900">Mexican Cuisine (Starters & Main Course)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Do you want to add alcohol?</label>
+                        <div class="flex gap-4">
+                            <div class="flex items-center">
+                                <input type="radio" id="alcoholIncluded" name="alcoholChoice" value="Alcohol" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 alcohol-radio">
+                                <label for="alcoholIncluded" class="ml-2 block text-sm text-gray-900">Yes</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="alcoholNotIncluded" name="alcoholChoice" value="No Alcohol" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 alcohol-radio" checked>
+                                <label for="alcoholNotIncluded" class="ml-2 block text-sm text-gray-900">No</label>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Step 4: Alcohol Selection (Hidden by default) -->
-                    <div id="alcoholDetailsSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Alcohol Selection</h2>
+                    <div id="alcoholOptionsSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
                         <div class="space-y-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Alcohol Option:</label>
-                            <div class="flex gap-4">
+                             <label class="block text-sm font-medium text-gray-700 mb-2">Select Alcohol Type:</label>
+                             <div class="flex flex-wrap gap-4">
                                 <div class="flex items-center">
-                                    <input type="radio" id="alcoholPack" name="alcoholOption" value="Pack" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
-                                    <label for="alcoholPack" class="ml-2 block text-sm text-gray-900">Pack</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="radio" id="alcoholFreeFlow" name="alcoholOption" value="Free Flow" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                                    <input type="radio" id="alcoholFreeFlow" name="alcoholType" value="Free Flow" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 alcohol-type-radio" required>
                                     <label for="alcoholFreeFlow" class="ml-2 block text-sm text-gray-900">Free Flow</label>
                                 </div>
-                            </div>
-                            <div class="mt-4">
-                                <label for="alcoholTopUp" class="block text-sm font-medium text-gray-700 mb-1">Top-up Options (Optional)</label>
-                                <input type="text" id="alcoholTopUp" name="alcoholTopUp" placeholder="e.g., Premium Wines, Specific Cocktails"
-                                       class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200">
+                                <div class="flex items-center">
+                                    <input type="radio" id="alcoholAddOns" name="alcoholType" value="Add Ons" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 alcohol-type-radio">
+                                    <label for="alcoholAddOns" class="ml-2 block text-sm text-gray-900">Add-Ons</label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 5: Additional Requirements -->
-                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Additional Requirements</h2>
+                    <!-- Free Flow Enhancements Section (Hidden by default) -->
+                    <div id="freeFlowSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Free Flow Details</h3>
+                        <div>
+                             <label class="block text-sm font-medium text-gray-700 mb-2">Select Free Flow Items:</label>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="freeflowBeerTower" name="freeFlowItems" value="Beer Tower" data-price="0" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 freeflow-checkbox">
+                                    <label for="freeflowBeerTower" class="ml-2 block text-sm text-gray-900">Beer Tower</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="freeflowBeerBottles" name="freeFlowItems" value="Beer Bottles" data-price="0" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 freeflow-checkbox">
+                                    <label for="freeflowBeerBottles" class="ml-2 block text-sm text-gray-900">Beer Bottles</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="freeflowCocktailJug" name="freeFlowItems" value="Cocktail Jug" data-price="0" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 freeflow-checkbox">
+                                    <label for="freeflowCocktailJug" class="ml-2 block text-sm text-gray-900">Cocktail Jug</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="freeflowWine" name="freeFlowItems" value="Wine" data-price="0" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 freeflow-checkbox">
+                                    <label for="freeflowWine" class="ml-2 block text-sm text-gray-900">Wine</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="freeflowMocktailJug" name="freeFlowItems" value="Mocktail Jug" data-price="0" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 freeflow-checkbox">
+                                    <label for="freeflowMocktailJug" class="ml-2 block text-sm text-gray-900">Mocktail Jug</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Duration:</label>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="flex items-center">
+                                    <input type="radio" id="duration1hr" name="freeFlowDuration" value="1 hr" data-price="30" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 freeflow-duration-radio">
+                                    <label for="duration1hr" class="ml-2 block text-sm text-gray-900">1 hr ($30)</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="duration1.5hr" name="freeFlowDuration" value="1.5 hr" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 freeflow-duration-radio">
+                                    <label for="duration1.5hr" class="ml-2 block text-sm text-gray-900">1.5 hr ($40)</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="duration2hr" name="freeFlowDuration" value="2 hr" data-price="50" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 freeflow-duration-radio">
+                                    <label for="duration2hr" class="ml-2 block text-sm text-gray-900">2 hr ($50)</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="duration2.5hr" name="freeFlowDuration" value="2.5 hr" data-price="60" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 freeflow-duration-radio">
+                                    <label for="duration2.5hr" class="ml-2 block text-sm text-gray-900">2.5 hr ($60)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alcohol Add-Ons Section (Hidden by default) -->
+                    <div id="alcoholAddOnsSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Alcohol Add-Ons</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="addWhiskey" name="alcoholAddOns" value="Whiskey (bottle)" data-price="100" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                                <label for="addWhiskey" class="ml-2 block text-sm text-gray-900">Whiskey (bottle) - $100</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="addWine" name="alcoholAddOns" value="Wine (bottle)" data-price="50" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                                <label for="addWine" class="ml-2 block text-sm text-gray-900">Wine (bottle) - $50</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="addBeerTower" name="alcoholAddOns" value="Beer (tower)" data-price="80" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                                <label for="addBeerTower" class="ml-2 block text-sm text-gray-900">Beer (tower) - $80</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="addCocktailJug" name="alcoholAddOns" value="Cocktail (jug)" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                                <label for="addCocktailJug" class="ml-2 block text-sm text-gray-900">Cocktail (jug) - $40</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Top-Up Options -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Top-Up Options:</h2>
+                    <div>
+                        <textarea id="alcoholTopUp" name="alcoholTopUp" rows="2" placeholder="e.g., Premium Wines, Specific Cocktails"
+                                       class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                    </div>
+
+                    <!-- Add-ons Section -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Additional Add-Ons</h2>
                     <div class="flex flex-wrap gap-4">
                         <div class="flex items-center">
-                            <input type="checkbox" id="reqDJ" name="additionalRequirements" value="DJ" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                            <label for="reqDJ" class="ml-2 block text-sm text-gray-900">DJ</label>
+                            <input type="checkbox" id="reqDJ" name="additionalRequirements" value="DJ" data-price="200" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                            <label for="reqDJ" class="ml-2 block text-sm text-gray-900">DJ ($200)</label>
                         </div>
                         <div class="flex items-center">
-                            <input type="checkbox" id="reqLights" name="additionalRequirements" value="Lights" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                            <label for="reqLights" class="ml-2 block text-sm text-gray-900">Lights</label>
+                            <input type="checkbox" id="reqLights" name="additionalRequirements" value="Lights" data-price="150" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                            <label for="reqLights" class="ml-2 block text-sm text-gray-900">Lights ($150)</label>
                         </div>
                         <div class="flex items-center">
-                            <input type="checkbox" id="reqMusic" name="additionalRequirements" value="Music" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                            <label for="reqMusic" class="ml-2 block text-sm text-gray-900">Music</label>
+                            <input type="checkbox" id="reqMusic" name="additionalRequirements" value="Music" data-price="100" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                            <label for="reqMusic" class="ml-2 block text-sm text-gray-900">Music ($100)</label>
                         </div>
                         <div class="flex items-center">
-                            <input type="checkbox" id="reqProjector" name="additionalRequirements" value="Projector" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                            <label for="reqProjector" class="ml-2 block text-sm text-gray-900">Projector</label>
+                            <input type="checkbox" id="reqProjector" name="additionalRequirements" value="Projector" data-price="50" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500 addon-checkbox">
+                            <label for="reqProjector" class="ml-2 block text-sm text-gray-900">Projector ($50)</label>
                         </div>
+                    </div>
+
+                    <!-- Discount Code Section -->
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Discount Code</h2>
+                    <div class="flex space-x-2">
+                         <input type="text" id="discountCode" name="discountCode" placeholder="Enter discount code"
+                               class="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200">
+                         <button type="button" id="applyDiscountBtn" class="bg-red-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-red-700 transition duration-300 ease-in-out">
+                            Apply
+                        </button>
                     </div>
 
                     <!-- Contact Information -->
@@ -306,36 +452,77 @@
                     <div>
                         <label for="contactName" class="block text-sm font-medium text-gray-700 mb-1">Your Full Name</label>
                         <input type="text" id="contactName" name="contactName" placeholder="John Doe"
-                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
+                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" required>
                     </div>
                     <div>
                         <label for="contactEmail" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                         <input type="email" id="contactEmail" name="contactEmail" placeholder="john.doe@example.com"
-                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
+                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" required>
                     </div>
                     <div>
                         <label for="contactPhone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                         <input type="tel" id="contactPhone" name="contactPhone" placeholder="+65 1234 5678"
-                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200" required>
+                               class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" required>
                     </div>
-
-                    <!-- Additional Details -->
-                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Other Special Requests/Notes</h2>
                     <div>
+                        <label for="specialRequests" class="block text-sm font-medium text-gray-700 mb-1">Other Special Requests/Notes</label>
                         <textarea id="specialRequests" name="specialRequests" rows="4" placeholder="e.g., dietary restrictions, specific decorations, AV equipment needs"
-                                  class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
+                                  class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200"></textarea>
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit"
+                    <button type="button" id="submitBtn"
                             class="w-full bg-red-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                         Submit Booking Request
                     </button>
                 </form>
             </div>
-
         </div>
     </main>
+
+    <!-- Floating Cart -->
+    <div id="floatingCart" class="cart-float hidden lg:block">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">Your Order Summary</h2>
+        <div id="cartItems" class="space-y-2">
+            <!-- Cart items will be dynamically inserted here by JavaScript -->
+            <p id="noItems" class="text-gray-500 text-sm">No items selected.</p>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-200 space-y-2">
+            <div class="flex justify-between">
+                <span class="text-sm font-medium text-gray-600">Subtotal:</span>
+                <span id="cartSubtotal" class="text-sm font-semibold text-gray-800">$0.00</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-sm font-medium text-gray-600">Discount (15%):</span>
+                <span id="cartDiscount" class="text-sm font-semibold text-red-600">-$0.00</span>
+            </div>
+            <div class="flex justify-between font-bold text-lg">
+                <span>Total:</span>
+                <span id="cartTotal" class="text-red-600">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal (Hidden by default) -->
+    <div id="paymentModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">Choose Your Payment Method</h2>
+            <p class="text-gray-600 mb-6">Select one of the options below to proceed with your booking.</p>
+            <div class="flex flex-col space-y-4">
+                <button type="button" id="payNowBtn" class="bg-green-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-green-700 transition duration-300 ease-in-out">
+                    Pay Now (Guaranteed Reservation)
+                </button>
+                <button type="button" id="payLaterBtn" class="bg-gray-400 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-gray-500 transition duration-300 ease-in-out">
+                    Pay Later (Non-Guaranteed)
+                </button>
+            </div>
+            <div id="qrCodeSection" class="hidden mt-6">
+                <h3 class="text-xl font-bold mb-2">Scan to Pay</h3>
+                <img src="https://placehold.co/200x200/50C878/FFFFFF?text=QR+Code" alt="QR Code" class="mx-auto border rounded-lg shadow">
+                <p class="text-sm text-gray-500 mt-2">Redirecting to payment link...</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Generic Footer -->
     <footer class="bg-gray-800 text-white py-6 mt-8">
@@ -353,72 +540,233 @@
         </div>
     </footer>
 
-    <!-- JavaScript for dynamic form behavior and slideshow -->
+    <!-- JavaScript for dynamic form behavior and cart calculation -->
     <script>
-        let slideIndex = 1; // Global variable for current slide
+        const form = document.getElementById('bookingForm');
+        const floatingCart = document.getElementById('floatingCart');
+        const cartItemsDiv = document.getElementById('cartItems');
+        const cartSubtotalSpan = document.getElementById('cartSubtotal');
+        const cartDiscountSpan = document.getElementById('cartDiscount');
+        const cartTotalSpan = document.getElementById('cartTotal');
+        const noItemsP = document.getElementById('noItems');
+
+        const selectionTypeRadios = document.querySelectorAll('input[name="selectionType"]');
+        const packageSelectionSection = document.getElementById('packageSelectionSection');
+        const customizeSection = document.getElementById('customizeSection');
+        const packageRadios = document.querySelectorAll('.package-radio');
+        const addonCheckboxes = document.querySelectorAll('.addon-checkbox');
+        const alcoholRadio = document.querySelector('input[name="alcoholChoice"]');
+        const alcoholOptionsSection = document.getElementById('alcoholOptionsSection');
+        const freeFlowSection = document.getElementById('freeFlowSection');
+        const alcoholAddOnsSection = document.getElementById('alcoholAddOnsSection');
+        const alcoholTypeRadios = document.querySelectorAll('.alcohol-type-radio');
+        const freeFlowCheckboxes = document.querySelectorAll('.freeflow-checkbox');
+        const freeFlowDurationRadios = document.querySelectorAll('.freeflow-duration-radio');
+        const discountInput = document.getElementById('discountCode');
+        const applyDiscountBtn = document.getElementById('applyDiscountBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const payNowBtn = document.getElementById('payNowBtn');
+        const payLaterBtn = document.getElementById('payLaterBtn');
+        const qrCodeSection = document.getElementById('qrCodeSection');
+
+        let isDiscountApplied = false;
+
+        // Slideshow logic
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+          showSlides(slideIndex += n);
+        }
 
         function showSlides(n) {
-            let i;
-            let slides = document.getElementsByClassName("mySlides");
-            if (n > slides.length) { slideIndex = 1 }
-            if (n < 1) { slideIndex = slides.length }
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
+          let i;
+          let slides = document.getElementsByClassName("mySlides");
+          if (n > slides.length) {slideIndex = 1}
+          if (n < 1) {slideIndex = slides.length}
+          for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+          }
+          slides[slideIndex-1].style.display = "block";
+        }
+
+
+        function updateCart() {
+            let subtotal = 0;
+            const cartItems = [];
+
+            // Get selected items based on selection type
+            const selectedType = document.querySelector('input[name="selectionType"]:checked');
+            if (selectedType) {
+                if (selectedType.value === 'package') {
+                    const selectedPackage = document.querySelector('input[name="packageOption"]:checked');
+                    if (selectedPackage) {
+                        const price = parseFloat(selectedPackage.dataset.price);
+                        subtotal += price;
+                        cartItems.push({ name: `Package: $${price}`, price: price });
+                    }
+                } else if (selectedType.value === 'customize') {
+                    cartItems.push({ name: 'Custom Order', price: 'TBD' });
+                }
             }
-            if (slides.length > 0) { // Ensure there are slides to show
-                slides[slideIndex - 1].style.display = "block";
+
+
+            // Get free flow duration price
+            const selectedFreeFlowDuration = document.querySelector('input[name="freeFlowDuration"]:checked');
+            if (selectedFreeFlowDuration && document.getElementById('alcoholFreeFlow').checked) {
+                const price = parseFloat(selectedFreeFlowDuration.dataset.price);
+                subtotal += price;
+                cartItems.push({ name: `Free Flow (${selectedFreeFlowDuration.value})`, price: price });
+            }
+
+            // Get add-on prices
+            addonCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const price = parseFloat(checkbox.dataset.price);
+                    subtotal += price;
+                    cartItems.push({ name: checkbox.value, price: price });
+                }
+            });
+
+            // Calculate discount
+            let discountAmount = 0;
+            if (isDiscountApplied) {
+                discountAmount = subtotal * 0.15;
+            }
+
+            const total = subtotal - discountAmount;
+
+            // Update floating cart UI
+            cartItemsDiv.innerHTML = '';
+            if (cartItems.length > 0) {
+                noItemsP.classList.add('hidden');
+                cartItems.forEach(item => {
+                    const p = document.createElement('p');
+                    p.className = 'text-sm text-gray-700 flex justify-between';
+                    p.innerHTML = `<span>${item.name}:</span> <span>${typeof item.price === 'number' ? '$' + item.price.toFixed(2) : item.price}</span>`;
+                    cartItemsDiv.appendChild(p);
+                });
+            } else {
+                noItemsP.classList.remove('hidden');
+            }
+
+            cartSubtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
+            cartDiscountSpan.textContent = `-$${discountAmount.toFixed(2)}`;
+            cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+            floatingCart.classList.remove('hidden');
+        }
+
+        function toggleAlcoholSections() {
+            const alcoholYes = document.getElementById('alcoholIncluded');
+            if (alcoholYes.checked) {
+                alcoholOptionsSection.classList.remove('hidden');
+            } else {
+                alcoholOptionsSection.classList.add('hidden');
+                freeFlowSection.classList.add('hidden');
+                alcoholAddOnsSection.classList.add('hidden');
+            }
+            updateCart();
+        }
+
+        function toggleAlcoholTypeSections() {
+            const freeFlowRadio = document.getElementById('alcoholFreeFlow');
+            if (freeFlowRadio.checked) {
+                freeFlowSection.classList.remove('hidden');
+                alcoholAddOnsSection.classList.add('hidden');
+            } else {
+                freeFlowSection.classList.add('hidden');
+                alcoholAddOnsSection.classList.remove('hidden');
+            }
+            updateCart();
+        }
+
+        function togglePaymentModal() {
+            if (form.checkValidity()) {
+                paymentModal.classList.remove('hidden');
+            } else {
+                form.reportValidity();
             }
         }
 
-        // Next/previous controls
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
+        function hidePaymentModal() {
+            paymentModal.classList.add('hidden');
+            qrCodeSection.classList.add('hidden');
         }
 
-        function toggleCustomizeSection() {
-            console.log('toggleCustomizeSection called!');
-            const customizeCheckbox = document.getElementById('customizeOption');
-            const customizeSection = document.getElementById('customizeSection');
+        // Event Listeners
+        selectionTypeRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                 // Clear all selections and reset discount
+                packageRadios.forEach(rb => rb.checked = false);
+                isDiscountApplied = false;
+                discountInput.value = '';
 
-            if (customizeCheckbox && customizeSection) {
-                if (customizeCheckbox.checked) {
-                    customizeSection.classList.remove('hidden');
-                    // Show the first slide when the section becomes visible
-                    showSlides(slideIndex);
-                } else {
+                if (event.target.value === 'package') {
+                    packageSelectionSection.classList.remove('hidden');
                     customizeSection.classList.add('hidden');
-                    // Optionally clear fields when hidden
-                    customizeSection.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
-                }
-            } else {
-                console.error('Error: customizeCheckbox or customizeSection element not found.');
-            }
-        }
-
-        function toggleAlcoholDetails(show) {
-            console.log('toggleAlcoholDetails called with show:', show);
-            const alcoholDetailsSection = document.getElementById('alcoholDetailsSection');
-
-            if (alcoholDetailsSection) {
-                if (show) {
-                    alcoholDetailsSection.classList.remove('hidden');
+                    // Add 'required' to package radios when this section is visible
+                    document.getElementById('package30').setAttribute('required', 'required');
                 } else {
-                    alcoholDetailsSection.classList.add('hidden');
-                    // Optionally clear fields and uncheck radios when hidden
-                    alcoholDetailsSection.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
-                    document.getElementById('alcoholTopUp').value = '';
+                    packageSelectionSection.classList.add('hidden');
+                    customizeSection.classList.remove('hidden');
+                    // Remove 'required' from package radios when this section is hidden
+                    document.getElementById('package30').removeAttribute('required');
                 }
-            } else {
-                console.error('Error: alcoholDetailsSection element not found.');
+                updateCart();
+            });
+        });
+
+        document.addEventListener('change', (event) => {
+            if (event.target.matches('.package-radio, .addon-checkbox, .freeflow-checkbox, .freeflow-duration-radio')) {
+                updateCart();
+            } else if (event.target.matches('.alcohol-radio')) {
+                toggleAlcoholSections();
+            } else if (event.target.matches('.alcohol-type-radio')) {
+                toggleAlcoholTypeSections();
             }
-        }
+        });
+
+        applyDiscountBtn.addEventListener('click', () => {
+            if (discountInput.value.toUpperCase() === 'VIVALOCA15') {
+                isDiscountApplied = true;
+                applyDiscountBtn.textContent = 'Applied!';
+                applyDiscountBtn.classList.add('bg-green-600', 'hover:bg-green-700', 'cursor-not-allowed');
+                applyDiscountBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            } else {
+                isDiscountApplied = false;
+                applyDiscountBtn.textContent = 'Invalid';
+                applyDiscountBtn.classList.add('bg-gray-400', 'hover:bg-gray-500', 'cursor-not-allowed');
+                applyDiscountBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            }
+            updateCart();
+        });
+
+        submitBtn.addEventListener('click', togglePaymentModal);
+        payNowBtn.addEventListener('click', () => {
+            qrCodeSection.classList.remove('hidden');
+            console.log('Redirecting to payment provider...');
+        });
+        payLaterBtn.addEventListener('click', () => {
+            form.submit();
+        });
+        // Close modal if user clicks outside of it
+        paymentModal.addEventListener('click', (event) => {
+            if (event.target === paymentModal) {
+                hidePaymentModal();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                hidePaymentModal();
+            }
+        });
 
         // Initial state setup on page load
         document.addEventListener('DOMContentLoaded', () => {
-            toggleCustomizeSection(); // Hide customize section if not checked
-            toggleAlcoholDetails(false); // Hide alcohol details section initially
+            showSlides(slideIndex);
+            updateCart();
         });
     </script>
-
 </body>
 </html>
