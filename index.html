@@ -13,7 +13,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f7f7f7;
-            padding-bottom: 6rem; /* Add padding for the fixed footer on mobile */
+             /* Add padding for the fixed footer on mobile */
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
@@ -67,13 +67,44 @@
             right: 1rem;
             transform: translateY(-50%);
             background-color: white;
-            padding: 1.5rem;
             border-radius: 0.75rem;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             max-width: 300px;
             z-index: 1000;
             transition: all 0.3s ease-in-out;
             border: 1px solid #e5e7eb;
+        }
+        .cart-float.minimized {
+            height: auto;
+            min-height: 0;
+            padding: 0;
+            transform: translateY(-50%);
+            resize: none;
+        }
+        .cart-header {
+            background-color: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .minimize-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0;
+            color: #4b5563;
+            cursor: pointer;
+        }
+        .cart-content {
+            padding: 1.5rem;
+        }
+        .cart-float.minimized .cart-content {
+            display: none;
         }
         @media (max-width: 1024px) {
             .cart-float {
@@ -83,6 +114,18 @@
                 right: 1rem;
                 transform: none;
                 max-width: none;
+            }
+            .cart-float.minimized {
+                width: auto;
+                min-width: 0;
+                max-width: none;
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+            }
+            .cart-float.minimized .cart-header {
+                border-bottom-left-radius: 0.75rem;
+                border-bottom-right-radius: 0.75rem;
             }
         }
         /* Modal Styles */
@@ -109,7 +152,7 @@
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen lg:px-6">
+<body class="flex flex-col min-h-screen">
 
     <!-- Navbar -->
     <nav class="bg-black text-white py-4 shadow-md">
@@ -137,7 +180,7 @@
 
                 <form id="bookingForm" class="space-y-6" action="https://formsubmit.co/8f3f42e07ad9b763e5086fc1d1d047ee" method="POST">
                     <input type="hidden" name="_subject" value="New event booking submission!">
-                    <input type="hidden" name="_next" value="https://techvision131.github.io/vivaloca_changi/thankyou.html">
+                    <input type="hidden" name="_next" value="http://127.0.0.1:5500/thankyou.html">
 
                     <!-- Step 1: Event Details & Location -->
                     <h2 class="text-xl font-semibold text-gray-800 pt-4">Step 1: Event Details</h2>
@@ -219,35 +262,35 @@
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Tiered Packages</h3>
                         <div class="space-y-4">
                             <div class="flex items-center">
-                                <input type="radio" id="package30" name="packageOption" value="$30: 2 starters, 2 mains, 1 salad, roti/naan, rice, 1 dessert" data-price="30" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio" required>
+                                <input type="radio" id="package30" name="packageOption" value="30" data-price="30" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio" required>
                                 <label for="package30" class="ml-2 block text-sm text-gray-900"><b>$30:</b> 2 starters, 2 mains, 1 salad, roti/naan, rice, 1 dessert</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="radio" id="package40a" name="packageOption" value="$40 (Option A): 2 starters, 3 mains, salad, roti/naan, rice, 1 dessert" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <input type="radio" id="package40a" name="packageOption" value="40a" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
                                 <label for="package40a" class="ml-2 block text-sm text-gray-900"><b>$40 (Option A):</b> 2 starters, 3 mains, salad, roti/naan, rice, 1 dessert</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="radio" id="package40b" name="packageOption" value="$40 (Option B): 3 starters, 2 mains, salad, roti/naan, rice, 1 dessert" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <input type="radio" id="package40b" name="packageOption" value="40b" data-price="40" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
                                 <label for="package40b" class="ml-2 block text-sm text-gray-900"><b>$40 (Option B):</b> 3 starters, 2 mains, salad, roti/naan, rice, 1 dessert</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="radio" id="package50" name="packageOption" value="$50: 3 starters, 3 mains, salad, roti/naan, rice, 1 dessert" data-price="50" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <input type="radio" id="package50" name="packageOption" value="50" data-price="50" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
                                 <label for="package50" class="ml-2 block text-sm text-gray-900"><b>$50:</b> 3 starters, 3 mains, salad, roti/naan, rice, 1 dessert</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="radio" id="package60" name="packageOption" value="$60: 4 starters, 4 mains, salad, roti/naan, rice, 1 dessert" data-price="60" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <input type="radio" id="package60" name="packageOption" value="60" data-price="60" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
                                 <label for="package60" class="ml-2 block text-sm text-gray-900"><b>$60:</b> 4 starters, 4 mains, salad, roti/naan, rice, 1 dessert</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="radio" id="package70" name="packageOption" value="$70: 5 starters, 5 mains, salad, roti/naan, rice, 1 dessert" data-price="70" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <input type="radio" id="package70" name="packageOption" value="70" data-price="70" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
                                 <label for="package70" class="ml-2 block text-sm text-gray-900"><b>$70:</b> 5 starters, 5 mains, salad, roti/naan, rice, 1 dessert</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="radio" id="package80" name="packageOption" value="$80: 6 starters, 6 mains, salad, roti/naan, rice, 1 dessert" data-price="80" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <input type="radio" id="package80" name="packageOption" value="80" data-price="80" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
                                 <label for="package80" class="ml-2 block text-sm text-gray-900"><b>$80:</b> 6 starters, 6 mains, salad, roti/naan, rice, 1 dessert</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="radio" id="package90" name="packageOption" value="$90: 7 starters, 7 mains, salad, roti/naan, rice, 1 dessert" data-price="90" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
+                                <input type="radio" id="package90" name="packageOption" value="90" data-price="90" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500 package-radio">
                                 <label for="package90" class="ml-2 block text-sm text-gray-900"><b>$90:</b> 7 starters, 7 mains, salad, roti/naan, rice, 1 dessert</label>
                             </div>
                         </div>
@@ -410,7 +453,7 @@
 
 
                     <!-- Top-Up Options -->
-                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Top-Up Options:</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 pt-4">Top-Up Options (Placeholder)</h2>
                     <div>
                         <textarea id="alcoholTopUp" name="alcoholTopUp" rows="2" placeholder="e.g., Premium Wines, Specific Cocktails"
                                        class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 transition duration-200"></textarea>
@@ -482,23 +525,30 @@
 
     <!-- Floating Cart -->
     <div id="floatingCart" class="cart-float hidden lg:block">
-        <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">Your Order Summary</h2>
-        <div id="cartItems" class="space-y-2">
-            <!-- Cart items will be dynamically inserted here by JavaScript -->
-            <p id="noItems" class="text-gray-500 text-sm">No items selected.</p>
+        <div id="cartHeader" class="cart-header">
+            <h2 class="text-md font-bold text-gray-800">Your Order Summary</h2>
+            <button id="minimizeBtn" class="minimize-btn leading-none">
+                <span id="minimizeIcon">_</span>
+            </button>
         </div>
-        <div class="mt-4 pt-4 border-t border-gray-200 space-y-2">
-            <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600">Subtotal:</span>
-                <span id="cartSubtotal" class="text-sm font-semibold text-gray-800">$0.00</span>
+        <div id="cartContent" class="cart-content">
+            <div id="cartItems" class="space-y-2">
+                <!-- Cart items will be dynamically inserted here by JavaScript -->
+                <p id="noItems" class="text-gray-500 text-sm">No items selected.</p>
             </div>
-            <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600">Discount (15%):</span>
-                <span id="cartDiscount" class="text-sm font-semibold text-red-600">-$0.00</span>
-            </div>
-            <div class="flex justify-between font-bold text-lg">
-                <span>Total:</span>
-                <span id="cartTotal" class="text-red-600">$0.00</span>
+            <div class="mt-4 pt-4 border-t border-gray-200 space-y-2">
+                <div class="flex justify-between">
+                    <span class="text-sm font-medium text-gray-600">Subtotal:</span>
+                    <span id="cartSubtotal" class="text-sm font-semibold text-gray-800">$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm font-medium text-gray-600">Discount (15%):</span>
+                    <span id="cartDiscount" class="text-sm font-semibold text-red-600">-$0.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg">
+                    <span>Total:</span>
+                    <span id="cartTotal" class="text-red-600">$0.00</span>
+                </div>
             </div>
         </div>
     </div>
@@ -525,7 +575,7 @@
     </div>
 
     <!-- Generic Footer -->
-    <footer class="bg-gray-800 text-white py-6 mt-8">
+    <footer class="bg-gray-800 text-white py-6 ">
         <div class="container mx-auto text-center px-4">
             <p>&copy; 2025 Viva Loca @ Changi. All rights reserved.</p>
             <img class="mx-auto block " src="assets /Viva-Loca-Logo-01-clear-background-e1603932349448.png" alt="vivaloca logo">
@@ -544,6 +594,10 @@
     <script>
         const form = document.getElementById('bookingForm');
         const floatingCart = document.getElementById('floatingCart');
+        const cartHeader = document.getElementById('cartHeader');
+        const minimizeBtn = document.getElementById('minimizeBtn');
+        const minimizeIcon = document.getElementById('minimizeIcon');
+        const cartContent = document.getElementById('cartContent');
         const cartItemsDiv = document.getElementById('cartItems');
         const cartSubtotalSpan = document.getElementById('cartSubtotal');
         const cartDiscountSpan = document.getElementById('cartDiscount');
@@ -759,6 +813,16 @@
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 hidePaymentModal();
+            }
+        });
+
+        // Minimizing Logic
+        minimizeBtn.addEventListener('click', () => {
+            floatingCart.classList.toggle('minimized');
+            if (floatingCart.classList.contains('minimized')) {
+                minimizeIcon.textContent = '+';
+            } else {
+                minimizeIcon.textContent = '_';
             }
         });
 
