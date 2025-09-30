@@ -212,8 +212,8 @@
 
                     <!-- Dining Mode -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Dining Mode</label>
-                        <div class="flex gap-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
+                        <div class="flex flex-wrap gap-4">
                             <div class="flex items-center">
                                 <input type="radio" id="modeDineIn" name="diningMode" value="Dine-In" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" required checked>
                                 <label for="modeDineIn" class="ml-2 block text-sm text-gray-900">Dine-In</label>
@@ -226,7 +226,7 @@
                     </div>
 
                     <!-- Outlet Selection -->
-                    <div>
+                    <div id="outletSelectionSection">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select Outlet</label>
                         <div class="flex flex-wrap gap-4">
                             <div class="flex items-center">
@@ -241,6 +241,31 @@
                                 <input type="radio" id="outletSalaam" name="outletSelection" value="Salaam Namaste" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" required>
                                 <label for="outletSalaam" class="ml-2 block text-sm text-gray-900">Salaam Namaste</label>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Service Type Section (for Dine-In) -->
+                    <div id="serviceTypeSection" class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="flex items-center">
+                                <input type="radio" id="serviceCatering" name="serviceType" value="Catering" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                                <label for="serviceCatering" class="ml-2 block text-sm text-gray-900">Catering</label>
+                            </div>
+                             <div class="flex items-center">
+                                <input type="radio" id="serviceBuffet" name="serviceType" value="Buffet" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" checked>
+                                <label for="serviceBuffet" class="ml-2 block text-sm text-gray-900">Buffet</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Catering Options -->
+                    <div id="cateringSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Catering Details</h3>
+                        <div>
+                            <label for="numHelpers" class="block text-sm font-medium text-gray-700 mb-1">Number of Helpers ($90 per helper for 1.5 hours)</label>
+                            <input type="number" id="numHelpers" name="numHelpers" min="0" value="0"
+                                   class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-red-500 transition duration-200" data-price="90">
                         </div>
                     </div>
 
@@ -299,7 +324,8 @@
 
                     <!-- Customize Section (Hidden by default) -->
                     <div id="customizeSection" class="hidden bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Customize Your Event</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Customize Your Order</h3>
+                        <h4 class="text-lg font-semibold text-red-600 mb-4">(Customized order will be assessed and billed at the restaurant hence not be reflected in your order summary)</h4>
 
                         <!-- Menu Slideshow -->
                         <div class="slideshow-container mb-6">
@@ -557,6 +583,10 @@
                     <span class="text-sm font-medium text-gray-600">Subtotal:</span>
                     <span id="cartSubtotal" class="text-sm font-semibold text-gray-800">$0.00</span>
                 </div>
+                <div id="deliveryChargeRow" class="flex justify-between hidden">
+                    <span class="text-sm font-medium text-gray-600">Delivery Charge:</span>
+                    <span id="cartDeliveryCharge" class="text-sm font-semibold text-gray-800">$0.00</span>
+                </div>
                 <div class="flex justify-between">
                     <span class="text-sm font-medium text-gray-600">Discount (15%):</span>
                     <span id="cartDiscount" class="text-sm font-semibold text-red-600">-$0.00</span>
@@ -639,6 +669,8 @@
         const payNowBtn = document.getElementById('payNowBtn');
         const payLaterBtn = document.getElementById('payLaterBtn');
         const qrCodeSection = document.getElementById('qrCodeSection');
+        const deliveryChargeRow = document.getElementById('deliveryChargeRow');
+        const cartDeliveryCharge = document.getElementById('cartDeliveryCharge');
 
         let isDiscountApplied = false;
 
@@ -658,13 +690,17 @@
           for (i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
           }
-          slides[slideIndex-1].style.display = "block";
+          if (slides.length > 0) {
+              slides[slideIndex-1].style.display = "block";
+          }
         }
 
 
         function updateCart() {
             let subtotal = 0;
             const cartItems = [];
+
+            const numGuests = parseInt(document.getElementById('numGuests').value) || 1;
 
             // Get selected items based on selection type
             const selectedType = document.querySelector('input[name="selectionType"]:checked');
@@ -673,31 +709,66 @@
                     const selectedPackage = document.querySelector('input[name="packageOption"]:checked');
                     if (selectedPackage) {
                         const price = parseFloat(selectedPackage.dataset.price);
-                        subtotal += price;
-                        cartItems.push({ name: `Package: $${price}`, price: price });
+                        const packageTotal = price * numGuests;
+                        subtotal += packageTotal;
+                        cartItems.push({ name: `Package: $${price} x ${numGuests} guests`, price: packageTotal });
                     }
                 } else if (selectedType.value === 'customize') {
                     cartItems.push({ name: 'Custom Order', price: 'TBD' });
                 }
             }
 
+            // Add Catering Helper Costs
+            const diningMode = document.querySelector('input[name="diningMode"]:checked').value;
+            const serviceType = document.querySelector('input[name="serviceType"]:checked')?.value;
+            
+            if (diningMode === 'Dine-In' && serviceType === 'Catering') {
+                const numHelpers = parseInt(document.getElementById('numHelpers').value) || 0;
+                if (numHelpers > 0) {
+                    const helperPrice = parseFloat(document.getElementById('numHelpers').dataset.price);
+                    const helpersTotal = numHelpers * helperPrice;
+                    subtotal += helpersTotal;
+                    cartItems.push({ name: `${numHelpers} Helper(s)`, price: helpersTotal });
+                }
+            }
+
 
             // Get free flow duration price
             const selectedFreeFlowDuration = document.querySelector('input[name="freeFlowDuration"]:checked');
-            if (selectedFreeFlowDuration && document.getElementById('alcoholFreeFlow').checked) {
+            if (selectedFreeFlowDuration && document.getElementById('alcoholIncluded').checked && document.getElementById('alcoholFreeFlow').checked) {
                 const price = parseFloat(selectedFreeFlowDuration.dataset.price);
-                subtotal += price;
-                cartItems.push({ name: `Free Flow (${selectedFreeFlowDuration.value})`, price: price });
+                const freeFlowTotal = price * numGuests;
+                subtotal += freeFlowTotal;
+                cartItems.push({ name: `Free Flow (${selectedFreeFlowDuration.value}) x ${numGuests} guests`, price: freeFlowTotal });
             }
 
-            // Get add-on prices
-            addonCheckboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    const price = parseFloat(checkbox.dataset.price);
-                    subtotal += price;
-                    cartItems.push({ name: checkbox.value, price: price });
-                }
+            // Get add-on prices (assuming these are per event, not per guest)
+            document.querySelectorAll('input[name="additionalRequirements"]:checked').forEach(checkbox => {
+                 const price = parseFloat(checkbox.dataset.price);
+                 subtotal += price;
+                 cartItems.push({ name: checkbox.value, price: price });
             });
+            
+            // Get alcohol add-on prices
+            document.querySelectorAll('input[name="alcoholAddOns"]:checked').forEach(checkbox => {
+                 const price = parseFloat(checkbox.dataset.price);
+                 subtotal += price;
+                 cartItems.push({ name: checkbox.value, price: price });
+            });
+
+            // Calculate Delivery Charge
+            let deliveryCharge = 0;
+            if (diningMode === 'Delivery' && subtotal < 2500 && subtotal > 0) {
+                deliveryCharge = 200;
+            }
+
+            if (deliveryCharge > 0) {
+                deliveryChargeRow.classList.remove('hidden');
+                cartDeliveryCharge.textContent = `$${deliveryCharge.toFixed(2)}`;
+            } else {
+                deliveryChargeRow.classList.add('hidden');
+            }
+
 
             // Calculate discount
             let discountAmount = 0;
@@ -705,7 +776,7 @@
                 discountAmount = subtotal * 0.15;
             }
 
-            const total = subtotal - discountAmount;
+            const total = subtotal + deliveryCharge - discountAmount;
 
             // Update floating cart UI
             cartItemsDiv.innerHTML = '';
@@ -788,7 +859,7 @@
         });
 
         document.addEventListener('change', (event) => {
-            if (event.target.matches('.package-radio, .addon-checkbox, .freeflow-checkbox, .freeflow-duration-radio')) {
+            if (event.target.matches('.package-radio, .addon-checkbox, .freeflow-checkbox, .freeflow-duration-radio, input[name="alcoholAddOns"], input[name="additionalRequirements"]')) {
                 updateCart();
             } else if (event.target.matches('.alcohol-radio')) {
                 toggleAlcoholSections();
@@ -796,6 +867,10 @@
                 toggleAlcoholTypeSections();
             }
         });
+        
+        document.getElementById('numGuests').addEventListener('input', updateCart);
+        document.getElementById('numHelpers').addEventListener('input', updateCart);
+
 
         applyDiscountBtn.addEventListener('click', () => {
             if (discountInput.value.toUpperCase() === 'VIVALOCA15') {
@@ -842,11 +917,71 @@
             }
         });
 
+        function setMinDateToday() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const todayDateString = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('eventDate').setAttribute('min', todayDateString);
+        }
+
+        // Main Form Logic
+        const diningModeRadios = document.querySelectorAll('input[name="diningMode"]');
+        const outletSection = document.getElementById('outletSelectionSection');
+        const outletRadios = document.querySelectorAll('input[name="outletSelection"]');
+        
+        const serviceTypeSection = document.getElementById('serviceTypeSection');
+        const serviceTypeRadios = document.querySelectorAll('input[name="serviceType"]');
+        const cateringSection = document.getElementById('cateringSection');
+        const numHelpersInput = document.getElementById('numHelpers');
+
+        function handleServiceTypeChange() {
+            const selectedService = document.querySelector('input[name="serviceType"]:checked').value;
+            if (selectedService === 'Catering') {
+                cateringSection.classList.remove('hidden');
+            } else {
+                cateringSection.classList.add('hidden');
+                numHelpersInput.value = 0;
+            }
+            updateCart();
+        }
+
+        function handleDiningModeChange() {
+            const selectedMode = document.querySelector('input[name="diningMode"]:checked').value;
+
+            if (selectedMode === 'Delivery') {
+                outletSection.classList.add('hidden');
+                outletRadios.forEach(radio => {
+                    radio.required = false;
+                    radio.checked = false; 
+                });
+                serviceTypeSection.classList.add('hidden');
+                cateringSection.classList.add('hidden');
+                document.getElementById('serviceBuffet').checked = true; // Reset service type to Buffet
+                numHelpersInput.value = 0;
+            } else { // Dine-In
+                outletSection.classList.remove('hidden');
+                outletRadios.forEach(radio => {
+                    radio.required = true;
+                });
+                serviceTypeSection.classList.remove('hidden');
+                handleServiceTypeChange(); // Check if catering section needs to be shown
+            }
+            updateCart();
+        }
+
+        diningModeRadios.forEach(radio => radio.addEventListener('change', handleDiningModeChange));
+        serviceTypeRadios.forEach(radio => radio.addEventListener('change', handleServiceTypeChange));
+
         // Initial state setup on page load
         document.addEventListener('DOMContentLoaded', () => {
             showSlides(slideIndex);
+            setMinDateToday();
+            handleDiningModeChange(); // Initial setup based on default selection
             updateCart();
         });
     </script>
 </body>
 </html>
+
